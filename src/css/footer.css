@@ -1,0 +1,62 @@
+.rodape {
+  background-color: var(--azul-titulo);
+  color: var(--branco);
+  padding: 44px 24px;
+  border-top: 1px solid var(--branco);
+}
+
+.rodape-conteudo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px 70px;
+}
+
+.rodape-sobre,
+.rodape-links,
+.rodape-social {
+  flex: 1;
+  min-width: 220px;
+}
+
+.rodape-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.rodape-logo img {
+  width: 46px;
+}
+
+.rodape h3 {
+  margin-bottom: 18px;
+}
+
+.rodape p,
+.rodape span {
+  color: var(--branco);
+}
+
+.rodape-links ul {
+  list-style: none;
+}
+
+.social-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 0;
+}
+
+.social-item img {
+  width: 22px;
+  height: 22px;
+}
+
+.rodape-final {
+  font-size: var(--texto-sm);
+  text-align: center;
+  border-top: 1px solid var(--brancogelo);
+  padding-top: 22px;
+}

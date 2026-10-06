@@ -1,0 +1,238 @@
+.noticias-destaque-section {
+  padding: 52px 0 40px;
+  background: linear-gradient(180deg, #f6fbff 0%, var(--branco) 100%);
+}
+
+.noticias-listagem-section {
+  padding: 32px 0 80px;
+  background-color: var(--brancogelo);
+}
+
+.titulo-secao-noticias {
+  margin-bottom: 28px;
+}
+
+.noticia-destaque {
+  display: grid;
+  grid-template-columns: minmax(320px, 1.15fr) minmax(280px, 0.85fr);
+  gap: 28px;
+  align-items: stretch;
+  padding: 24px;
+  background-color: var(--branco);
+  border: 1px solid rgba(6, 85, 184, 0.08);
+  border-radius: 24px;
+  box-shadow: 0 18px 45px rgba(6, 85, 184, 0.08);
+}
+
+.imagem-destaque {
+  min-width: 0;
+}
+
+.imagem-destaque img {
+  width: 100%;
+  height: 100%;
+  min-height: 360px;
+  max-height: 460px;
+  border-radius: 20px;
+  object-fit: cover;
+  display: block;
+}
+
+.foto-principal {
+  object-position: center;
+}
+
+.texto-destaque {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 12px 4px;
+}
+
+.texto-destaque h2 {
+  color: var(--azul-titulo);
+  font-size: clamp(30px, 4vw, 42px);
+}
+
+.texto-destaque p {
+  margin: 0;
+}
+
+.categoria-azul {
+  background-color: var(--azul-titulo);
+  color: var(--branco);
+  padding: 7px 16px;
+  border-radius: var(--raio-pilula);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.data {
+  color: var(--cinza-texto);
+  font-size: var(--texto-sm);
+}
+
+.btn-azul {
+  padding: 12px 32px;
+  border-radius: var(--raio-lg);
+  border: 0;
+  cursor: pointer;
+}
+
+.noticias-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.card-noticia {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--branco);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 14px 30px rgba(17, 24, 39, 0.08);
+}
+
+.card-noticia img {
+  width: 100%;
+  height: 210px;
+  object-fit: cover;
+  display: block;
+}
+
+.categoria {
+  background-color: var(--amarelo-logo);
+  color: var(--preto-destaque);
+  padding: 5px 12px;
+  border-radius: var(--raio-pilula);
+  font-size: var(--texto-xs);
+  display: inline-block;
+}
+
+.card-texto {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 18px 18px 20px;
+}
+
+.card-texto h3 {
+  color: var(--azul-titulo);
+  font-size: 22px;
+}
+
+.card-texto p {
+  margin: 0;
+}
+
+.card-texto .btn-card {
+  margin-top: auto;
+}
+
+.btn-card {
+  padding: 10px 24px;
+  border-radius: var(--raio-lg);
+  border: 0;
+  cursor: pointer;
+}
+
+.noticias-status {
+  width: 100%;
+  color: var(--cinza-texto);
+  text-align: center;
+  padding: 36px 16px;
+}
+
+.noticia-modal {
+  width: min(760px, calc(100% - 32px));
+  border: 0;
+  border-radius: var(--raio-xl);
+  padding: 28px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.noticia-modal::backdrop {
+  background-color: rgba(0, 0, 0, 0.45);
+}
+
+.noticia-modal img {
+  width: 100%;
+  max-height: 320px;
+  object-fit: cover;
+  border-radius: var(--raio-lg);
+}
+
+.noticia-modal h2 {
+  color: var(--azul-titulo);
+  margin: 10px 0 8px;
+}
+
+.noticia-modal p {
+  margin-top: 10px;
+}
+
+.noticia-modal-fechar {
+  float: right;
+  border: 0;
+  background: transparent;
+  color: var(--azul-titulo);
+  cursor: pointer;
+  font-size: 28px;
+  line-height: 1;
+}
+
+@media (max-width: 1100px) {
+  .noticias-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 820px) {
+  .noticias-destaque-section {
+    padding: 40px 0 24px;
+  }
+
+  .noticias-listagem-section {
+    padding: 24px 0 56px;
+  }
+
+  .noticia-destaque {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+
+  .imagem-destaque img {
+    min-height: 240px;
+    max-height: 320px;
+  }
+
+  .texto-destaque {
+    padding: 4px 0;
+  }
+
+  .texto-destaque h2 {
+    font-size: 28px;
+  }
+
+  .noticias-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .card-noticia img {
+    height: 220px;
+  }
+}

@@ -1,0 +1,137 @@
+.hero-home {
+  background-color: var(--azul-titulo);
+  color: var(--branco);
+  padding: 80px;
+  margin-bottom: 40px;
+}
+
+.hero-conteudo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 60px;
+}
+
+.hero-texto {
+  flex: 1;
+  min-width: 280px;
+}
+
+.hero-foto {
+  flex: 1;
+  min-width: 280px;
+}
+
+.hero-texto h1 {
+  max-width: 520px;
+  font-size: var(--titulo-hero);
+  line-height: 1.15;
+}
+
+.hero-texto p {
+  max-width: 520px;
+  margin-bottom: 24px;
+  color: var(--branco);
+}
+
+.hero-botoes {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.btn-dourado,
+.btn-contorno-branco {
+  padding: 0 20px;
+}
+
+.btn-dourado img {
+  width: 17px;
+  margin-right: 10px;
+}
+
+.hero-imagem {
+  max-width: 520px;
+  border-radius: var(--raio-xl);
+}
+
+.home-noticias-lista {
+  display: contents;
+}
+
+.titulo-secao {
+  text-align: center;
+  margin-bottom: 42px;
+}
+
+.titulo-secao h2 {
+  color: var(--azul-titulo);
+  font-size: var(--titulo-md);
+}
+
+.titulo-secao p {
+  color: var(--cinza-texto);
+}
+
+
+
+.contato {
+  background-color: var(--brancogelo);
+  padding: 80px;
+}
+
+.formulario-contato {
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: var(--branco);
+  border: 1px solid var(--cinza-claro);
+  border-radius: var(--raio-md);
+  padding: 24px;
+}
+
+.formulario-contato label {
+  display: block;
+}
+
+.formulario-contato input,
+.formulario-contato textarea {
+  width: 100%;
+  border: 0;
+  border-radius: var(--raio-sm);
+  background-color: var(--brancogelo);
+  padding: 12px;
+  margin-bottom: 18px;
+  font-family: var(--fonte-principal);
+  font-size: var(--texto-base);
+}
+
+
+
+.formulario-contato button {
+  width: 100%;
+  padding: 13px;
+}
+
+.ultimas-noticias {
+  padding: 80px 0;
+  background-color: var(--branco);
+}
+
+.ultimas-noticias h2 {
+  text-align: center;
+  color: var(--azul-titulo);
+  font-size: var(--titulo-md);
+  margin-bottom: 50px;
+}
+
+.home-noticias-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.noticias-status {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--cinza-texto);
+}
