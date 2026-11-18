@@ -50,7 +50,7 @@ Os tokens estão centralizados em [`src/css/global.css`](../src/css/global.css).
 O cabeçalho:
 
 - fica fixo no topo com `position: sticky`
-- usa logo à esquerda e navegação central
+- usa logo à esquerda, navegação central e botão de login à direita
 - destaca a rota ativa
 - adiciona sombra ao rolar a página
 
@@ -150,6 +150,19 @@ Leitura visual:
 - sensibilização inicial
 - preenchimento orientado
 
+### Login e admin
+
+Características:
+
+- fundo neutro
+- cards brancos com borda leve
+- linguagem mais operacional
+- menos carga institucional e mais foco funcional
+
+Leitura visual:
+
+- transição do site público para um ambiente de gestão
+
 ## Componentes recorrentes
 
 ### Botões
@@ -163,7 +176,7 @@ Padrões identificados:
 
 Interpretação:
 
-- o sistema diferencia ações emocionais e informativas pela cor
+- o sistema diferencia ações emocionais, informativas e administrativas pela cor
 
 ### Cards
 
@@ -172,6 +185,7 @@ Usados em:
 - notícias
 - impacto
 - estatísticas
+- áreas administrativas
 - transparência financeira
 
 Padrão:
@@ -222,14 +236,16 @@ Limitações observadas:
 - navegação simples e previsível
 - identidade coerente com causa social
 - linguagem visual amigável
-- navegação simples entre páginas públicas
+- boa separação entre áreas públicas e administrativas
 - CTAs claros nas páginas principais
-- formulários públicos mostram confirmação simulada no navegador
+- formulário de contato possui confirmação visual e persistência para o admin
 
 ## Fragilidades
 
 - uso frequente de `alert()` em fluxos importantes reduz a qualidade da experiência
 - parceiros ainda passam sensação de conteúdo incompleto
+- o admin não tem tabela mais rica, filtros, edição ou marcação de leitura para mensagens
+- o login/admin reaproveita menos da identidade emocional do restante do site
 
 ## Recomendações de evolução do design
 
@@ -237,6 +253,8 @@ Limitações observadas:
 - criar estados visuais de loading, vazio e erro mais consistentes
 - implementar menu mobile dedicado
 - enriquecer a identidade dos parceiros com logos reais
+- evoluir a aba `Mensagens` com filtros, exclusão e marcação de leitura
+- padronizar melhor a experiência do admin com tabelas e ações
 - se o upload físico de imagem for ativado, mostrar preview e progresso
 
 ## Resumo do design atual

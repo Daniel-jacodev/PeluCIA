@@ -1,5 +1,5 @@
 import { renderSectionHeading } from "../components/titles.js";
-import { listarNoticiasMock, salvarMensagemMock } from "../services/mockData.js";
+import { apiUrl } from "../services/api.js";
 
 export function renderHomePage() {
   return `
@@ -96,7 +96,7 @@ function renderizarNoticiaHome(noticia) {
   `;
 }
 
-export function initHomePage() {
+export async function initHomePage() {
   const lista = document.getElementById("homeNoticias");
   const formContato = document.getElementById("formContatoHome");
   const feedbackContato = document.getElementById("feedbackContatoHome");
@@ -106,7 +106,16 @@ export function initHomePage() {
   }
 
   try {
-    const ultimasNoticias = listarNoticiasMock().slice(0, 3);
+    const resposta = await fetch(apiUrl("/api/noticias"));
+    const resultado = await resposta.json();
+
+    if (!resposta.ok || !resultado.sucesso) {
+      throw new Error();
+    }
+
+    const ultimasNoticias = resultado.data
+      .sort((a, b) => new Date(b.data) - new Date(a.data))
+      .slice(0, 3);
 
     if (ultimasNoticias.length === 0) {
       lista.innerHTML = '<p class="noticias-status">Nenhuma notícia cadastrada.</p>';
@@ -114,19 +123,45 @@ export function initHomePage() {
     }
 
     lista.innerHTML = ultimasNoticias.map(renderizarNoticiaHome).join("");
-  } catch {
-    lista.innerHTML = '<p class="noticias-status">Não foi possível carregar as notícias demonstrativas.</p>';
+  } catch (erro) {
+    lista.innerHTML = '<p class="noticias-status">Não foi possível carregar as notícias.</p>';
   }
 
-  formContato?.addEventListener("submit", (event) => {
+  formContato?.addEventListener("submit", async (event) => {
     event.preventDefault();
-    salvarMensagemMock({
-      nome: document.getElementById("name").value,
-      email: document.getElementById("email").value,
-      mensagem: document.getElementById("message").value,
-    });
-    feedbackContato.textContent = "Mensagem registrada neste navegador (modo demonstração).";
-    feedbackContato.className = "feedback-form feedback-sucesso";
-    formContato.reset();
+    const botaoEnviar = formContato.querySelector('button[type="submit"]');
+    botaoEnviar.disabled = true;
+    feedbackContato.textContent = "Salvando mensagem...";
+    feedbackContato.className = "feedback-form";
+
+    try {
+      const resposta = await fetch(apiUrl("/api/contato"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nome: document.getElementById("name").value,
+          email: document.getElementById("email").value,
+          mensagem: document.getElementById("message").value,
+        }),
+      });
+
+      const resultado = await resposta.json();
+
+      if (resposta.ok) {
+        feedbackContato.textContent = "Mensagem salva com sucesso.";
+        feedbackContato.className = "feedback-form feedback-sucesso";
+        formContato.reset();
+      } else {
+        feedbackContato.textContent = resultado.message || "Erro ao salvar mensagem.";
+        feedbackContato.className = "feedback-form feedback-erro";
+      }
+    } catch (_erro) {
+      feedbackContato.textContent = "Não foi possível conectar ao servidor.";
+      feedbackContato.className = "feedback-form feedback-erro";
+    } finally {
+      botaoEnviar.disabled = false;
+    }
   });
 }

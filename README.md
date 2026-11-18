@@ -1,32 +1,126 @@
 # Pelu&Cia
 
-Site da Pelu&Cia em modo de demonstração. O frontend roda sem API ou banco de dados: notícias, doações e prestação de contas vêm de dados mockados em `src/js/services/mockData.js`.
+Sistema web da Pelu&Cia com frontend em Vite, backend em Node.js/Express e banco PostgreSQL.
 
-Os formulários de contato e voluntariado mostram uma confirmação simulada e guardam os registros no `localStorage` do navegador atual. Esses envios não chegam à equipe. Os dados financeiros são fictícios e não devem ser usados para doações reais.
+## O que o sistema faz
 
-## Executar o frontend
+- Exibe a home institucional do projeto.
+- Lista e detalha notícias reais do banco de dados.
+- Salva mensagens da página inicial para consulta no painel administrativo.
+- Recebe inscrições de voluntariado no banco.
+- Mostra a página de doações com chave PIX e dados bancários cadastrados no banco.
+- Exibe a prestação de contas real com entradas e saídas do projeto.
+- Possui painel administrativo para notícias, prestação de contas, doações, voluntários e mensagens.
 
-Requisitos: Node.js e npm.
+## Requisitos
+
+- Node.js 20.19+ na série 20 ou 22.12+
+- Docker e Docker Compose
+- Git
+
+## Como rodar do zero
+
+1. Clone o repositório.
 
 ```bash
-npm install
+git clone https://github.com/Daniel-jacodev/PeluCIA.git
+cd PeluCIA
+```
+
+2. Instale as dependências.
+
+```bash
+npm ci
+```
+
+3. Crie o arquivo `.env` a partir do exemplo.
+
+```bash
+cp .env.example .env
+```
+
+Para habilitar o painel, preencha `ADMIN_EMAIL`, `ADMIN_PASSWORD` e `ADMIN_TOKEN_SECRET` no `.env`. Gere o segredo com `node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"`.
+
+4. Suba a infraestrutura local.
+
+```bash
+npm run infra:up
+```
+
+Isso sobe:
+
+- PostgreSQL em `localhost:5434`
+
+5. Inicie o backend.
+
+```bash
+npm run dev:backend
+```
+
+6. Em outro terminal, inicie o frontend.
+
+```bash
 npm run dev:frontend
 ```
 
-Abra `http://localhost:5173`. Não é necessário iniciar o backend, PostgreSQL ou Docker para navegar pelo site.
+7. Abra o sistema.
+
+- Frontend: `http://localhost:5173`
+- Backend: `http://localhost:3000`
 
 ## Scripts
 
-- `npm run dev` ou `npm run dev:frontend`: inicia o frontend Vite.
+- `npm run dev`: inicia o frontend Vite.
+- `npm run dev:frontend`: inicia o frontend Vite.
+- `npm run dev:backend`: inicia o backend com watch mode.
+- `npm start`: inicia o backend sem watch mode.
 - `npm run build`: gera o build de produção do frontend.
+- `npm run db:up`: sobe apenas o PostgreSQL.
+- `npm run infra:up`: sobe o PostgreSQL.
+- `npm run db:down`: derruba a infraestrutura Docker.
+- `npm run infra:down`: derruba a infraestrutura Docker.
 
-O repositório ainda contém o backend Express/PostgreSQL separado, mas o frontend atual não o consome. Consulte `backend/README.md` para a documentação desse serviço.
-
-## Estrutura
+## Estrutura do projeto
 
 ```txt
-src/       Frontend Vite e dados mockados
-public/    Imagens e arquivos públicos
-backend/   Serviço Express/PostgreSQL independente do frontend atual
-docs/      Documentação do projeto
+backend/            API Express, regras de negócio e acesso ao PostgreSQL
+src/                Frontend Vite
+public/             Imagens e arquivos públicos
+docs/               Documentação do sistema
+docker-compose.yml  Infra local com PostgreSQL
 ```
+
+## Acesso administrativo
+
+1. Abra `http://localhost:5173/login`
+2. Entre com o e-mail e senha definidos em `.env`
+3. Você será redirecionado para `/admin`
+
+O painel administrativo possui:
+
+- cadastro e exclusão de notícias
+- cadastro de movimentações financeiras
+- cadastro dos dados de doação
+- cadastro e visualização das solicitações de voluntariado
+- visualização das mensagens de contato recebidas
+
+## Integrações principais
+
+- Notícias: `GET /api/noticias`
+- Contato da home: `POST /api/contato`
+- Mensagens no admin: `GET /api/contato`
+- Voluntariado: `POST /api/voluntarios`
+- Prestação de contas: `GET /api/contas`
+- Dados de doação: `GET /api/doacoes`
+- Admin de doação: `PUT /api/doacoes`
+
+## Observações importantes
+
+- As mensagens de contato ficam salvas no banco e aparecem na aba `Mensagens` do painel administrativo.
+- A página `Ajudar` consome os dados reais de doação e contas do banco.
+- A página `Notícias` e a home consultam as notícias no banco pela API.
+
+## Problemas comuns
+
+- Se o backend não subir, confira se o PostgreSQL está rodando e se o `.env` está correto.
+- Se o frontend não conseguir acessar a API, confirme `VITE_API_BASE_URL=http://localhost:3000`.

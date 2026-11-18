@@ -495,12 +495,3 @@
     align-items: flex-start;
   }
 }
-
-.aviso-demonstracao {
-  padding: 12px 16px;
-  border: 1px solid #f2c66d;
-  border-radius: var(--raio-sm);
-  background-color: #fff8e7;
-  color: #704b00;
-  font-weight: 600;
-}

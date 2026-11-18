@@ -1,3 +1,8 @@
+import { apiUrl } from "../../services/api.js";
+
+export const API_CONTAS_URL = apiUrl("/api/contas");
+export const API_DOACOES_URL = apiUrl("/api/doacoes");
+
 export function formatarMoeda(valor) {
   return new Intl.NumberFormat("pt-BR", {
     style: "currency",

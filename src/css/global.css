@@ -114,6 +114,7 @@ a {
 .botao-azul,
 .botao-claro,
 .botao-contorno,
+.botao-login,
 .btn-submit,
 .formulario-contato button {
   display: inline-flex;
@@ -145,7 +146,8 @@ a {
 .btn-azul,
 .botao-azul,
 .btn-submit,
-.formulario-contato button {
+.formulario-contato button,
+.botao-login {
   background-color: var(--azul-titulo);
   color: var(--branco);
 }
@@ -164,6 +166,13 @@ a {
 .btn-azul:hover,
 .botao-azul:hover,
 .btn-submit:hover,
-.formulario-contato button:hover {
+.formulario-contato button:hover,
+.botao-login:hover {
   background-color: var(--azul-escuro);
+}
+
+.btn-submit:disabled,
+.formulario-contato button:disabled {
+  background-color: var(--cinza-subtitulo);
+  cursor: wait;
 }

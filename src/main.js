@@ -1,7 +1,9 @@
 import { initHeaderEffect, renderHeader } from './js/components/header.js';
 import { renderFooter } from './js/components/footer.js';
 import { initAjudarPage, renderAjudarPage } from './js/pages/ajudar.js';
+import { initAdminNoticiasPage, renderAdminNoticiasPage } from './js/pages/adminNoticias.js';
 import { initHomePage, renderHomePage } from './js/pages/home.js';
+import { initLoginPage, renderLoginPage } from './js/pages/login.js';
 import { initNoticiasPage, renderNoticiasPage } from './js/pages/noticias.js';
 import { renderSobrePage } from './js/pages/sobre.js';
 import { initVoluntarioPage, renderVoluntarioPage } from './js/pages/voluntario.js';
@@ -38,6 +40,23 @@ const routes = {
     pageClass: 'voluntariado-page',
     afterRender: initVoluntarioPage,
   },
+  '/login': {
+    render: renderLoginPage,
+    title: 'Pelu&Cia - Login',
+    afterRender: initLoginPage,
+  },
+  '/admin': {
+    render: renderAdminNoticiasPage,
+    title: 'Pelu&Cia - Painel Administrativo',
+    pageClass: 'admin-noticias-page',
+    afterRender: initAdminNoticiasPage,
+  },
+  '/admin-noticias': {
+    render: renderAdminNoticiasPage,
+    title: 'Pelu&Cia - Painel Administrativo',
+    pageClass: 'admin-noticias-page',
+    afterRender: initAdminNoticiasPage,
+  },
 };
 
 function mountFooter() {
@@ -57,6 +76,10 @@ function mountHeader() {
   }
 }
 
+function isUserAuthenticated() {
+  return !!localStorage.getItem("adminToken");
+}
+
 function renderRoute() {
   const app = document.querySelector('#app');
 
@@ -65,6 +88,34 @@ function renderRoute() {
   }
 
   const pathname = window.location.pathname;
+  const isAuthenticated = isUserAuthenticated();
+
+  // Se tenta acessar /admin ou /admin-noticias sem autenticação, redireciona para login
+  if ((pathname === '/admin' || pathname === '/admin-noticias') && !isAuthenticated) {
+    window.history.replaceState({}, '', '/login');
+    const route = routes['/login'];
+    app.className = route.pageClass || '';
+    app.innerHTML = route.render();
+    document.title = route.title;
+    mountHeader();
+    mountFooter();
+    route.afterRender?.();
+    return;
+  }
+
+  // Se está em /login e já autenticado, redireciona para /admin
+  if (pathname === '/login' && isAuthenticated) {
+    window.history.replaceState({}, '', '/admin');
+    const route = routes['/admin'];
+    app.className = route.pageClass || '';
+    app.innerHTML = route.render();
+    document.title = route.title;
+    mountHeader();
+    mountFooter();
+    route.afterRender?.();
+    return;
+  }
+
   const route = routes[pathname] || routes['/'];
 
   app.className = route.pageClass || '';

@@ -67,6 +67,8 @@ O frontend é uma SPA simples. `src/main.js` carrega a rota atual, monta cabeça
 - `/noticias`: notícias
 - `/sobre`: apresentação institucional
 - `/voluntario`: inscrição de voluntário
+- `/login`: login administrativo
+- `/admin` e `/admin-noticias`: painel administrativo
 
 ### Fluxo do cliente
 
@@ -81,17 +83,17 @@ flowchart LR
   D --> H[Noticias]
   D --> I[Sobre]
   D --> J[Voluntario]
+  D --> K[Login]
+  D --> L[Admin]
 ```
 
 ### Páginas dinâmicas
 
-- `home.js`: mostra notícias demonstrativas e registra mensagem simulada no navegador.
-- `noticias.js`: mostra notícias demonstrativas, destaca a principal e abre modal.
-- `ajudar.js`: mostra dados demonstrativos de doação e prestação de contas.
-- `voluntario.js`: registra uma inscrição simulada no navegador.
-- `services/mockData.js`: fornece os dados do site e persiste os envios simulados no `localStorage`.
-
-O frontend não chama a API nem precisa do backend ou do PostgreSQL para funcionar. Os dados financeiros exibidos são fictícios.
+- `home.js`: carrega notícias e salva mensagem de contato.
+- `noticias.js`: busca notícias, destaca a principal e abre modal.
+- `ajudar.js`: busca configuração de doação e contas lançadas no banco.
+- `voluntario.js`: envia cadastro de voluntário.
+- `adminNoticias.js`: painel unificado com abas de notícias, contas, doações, voluntários e mensagens.
 
 ## Backend
 
@@ -123,15 +125,51 @@ flowchart LR
 - serve `public/`
 - registra rotas da API
 
-## Rotas do backend independente
+## Rotas
+
+### Autenticação
+
+- `POST /api/auth/login`
+
+Usada para obter token administrativo assinado via HMAC.
+
+### Notícias
 
 - `GET /api/noticias`
-- `GET /api/contas`
-- `GET /api/doacoes`
-- `POST /api/contato`
-- `POST /api/voluntarios`
+- `POST /api/noticias`
+- `DELETE /api/noticias/:id`
 
-As rotas de autenticação e gestão foram removidas. O frontend atual não consome estas rotas; elas permanecem no backend independente.
+Listagem pública; criação e exclusão protegidas por admin.
+
+### Contas de prestação
+
+- `GET /api/contas`
+- `POST /api/contas`
+- `DELETE /api/contas/:id`
+
+Leitura pública para a página `Ajudar`, criação/exclusão protegidas por admin.
+
+### Configuração de doação
+
+- `GET /api/doacoes`
+- `PUT /api/doacoes`
+
+Guarda chave PIX, favorecido e dados de transferência exibidos na página pública.
+
+### Contato
+
+- `POST /api/contato`
+- `GET /api/contato`
+
+Recebe nome, e-mail e mensagem da home e salva no banco. A listagem é protegida por admin.
+
+### Voluntariado
+
+- `POST /api/voluntarios`
+- `POST /api/voluntarios/admin`
+- `GET /api/voluntarios`
+
+O fluxo público salva o cadastro. O admin consegue listar e cadastrar manualmente.
 
 ## Banco de dados
 
@@ -201,27 +239,31 @@ Campos principais:
 - `instituicao`
 - `observacao_transferencia`
 
-## Dados do frontend
+## Integrações
 
 ### Notícias
 
-As páginas inicial e de notícias usam os dados de `src/js/services/mockData.js`. A home mostra as três mais recentes; a página de notícias abre o conteúdo completo em modal.
+O frontend consome `GET /api/noticias` e a home mostra as 3 mais recentes. A página de notícias mostra o destaque principal, lista os demais cards e abre o conteúdo completo em modal.
 
 ### Contato
 
-A home registra mensagens no `localStorage` do navegador atual. Nenhuma mensagem é enviada à equipe.
+A home envia a mensagem para `POST /api/contato`. O backend valida nome, e-mail e mensagem e salva o conteúdo em `mensagens_contato`.
 
 ### Voluntariado
 
-O formulário de voluntariado registra a inscrição no `localStorage` do navegador atual. Nenhuma inscrição é enviada à equipe.
+O formulário público envia `POST /api/voluntarios`. O backend valida CPF, idade mínima e disponibilidade e salva a inscrição no banco.
 
 ### Prestação de contas
 
-A aba `Ajudar` calcula o saldo e mostra o histórico a partir de lançamentos demonstrativos locais.
+A aba `Ajudar` busca contas em `GET /api/contas`, calcula saldo e mostra histórico real.
 
 ### Doações
 
-Os dados de doação da aba `Ajudar` vêm do mock local e são fictícios. Não devem ser usados para transferências reais.
+A aba `Ajudar` busca `GET /api/doacoes` para renderizar chave PIX e dados bancários. O painel admin salva essas informações em `PUT /api/doacoes`.
+
+### Admin
+
+O login gera token em memória do navegador via `localStorage`. O painel administrativo unificado usa esse token para publicar notícias, lançar contas, salvar dados de doação, consultar voluntários e ler mensagens de contato.
 
 ## Seed e inicialização
 
@@ -229,12 +271,15 @@ Ao iniciar o backend:
 
 - as tabelas são criadas se não existirem
 - notícias iniciais são inseridas sem duplicar títulos
+- a configuração de doação pode ser criada/atualizada no painel admin
 
 ## Limitações atuais
 
+- não existe upload multipart real para imagens de notícia; o admin usa `base64` no formulário atual
 - a área pública de parceiros ainda é estática
+- mensagens de contato são persistidas, mas ainda não possuem exclusão ou marcação de leitura
 - não há módulo de adoção ou relatório financeiro avançado
 
 ## Resumo
 
-O frontend atual é uma SPA demonstrativa com dados locais. O backend Express/PostgreSQL foi mantido separado e sem rotas de administração.
+A arquitetura atual é simples e funcional: frontend SPA, API Express em camadas e PostgreSQL como base de dados. As integrações principais já estão ligadas ao sistema real, incluindo notícias, contato, voluntariado, prestação de contas e dados de doação.

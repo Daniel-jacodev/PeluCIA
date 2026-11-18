@@ -1,5 +1,5 @@
 import { renderPageHeader } from "../components/titles.js";
-import { salvarVoluntarioMock } from "../services/mockData.js";
+import { apiUrl } from "../services/api.js";
 
 export function renderVoluntarioPage() {
   return `
@@ -98,17 +98,45 @@ export function initVoluntarioPage() {
   const form = document.getElementById("formVoluntario");
   const feedback = document.getElementById("feedbackVoluntario");
 
-  form?.addEventListener("submit", (event) => {
+  form?.addEventListener("submit", async (event) => {
     event.preventDefault();
-    salvarVoluntarioMock({
+    const botaoEnviar = form.querySelector('button[type="submit"]');
+    botaoEnviar.disabled = true;
+
+    const dados = {
       nome: document.getElementById("nome").value,
       email: document.getElementById("email").value,
       telefone: document.getElementById("telefone").value,
       idade: Number.parseInt(document.getElementById("idade").value, 10),
       disponibilidade: document.querySelector('input[name="disponibilidade"]:checked')?.value,
-    });
-    feedback.textContent = "Inscrição guardada neste navegador (modo demonstração).";
-    feedback.className = "feedback-form feedback-sucesso";
-    form.reset();
+    };
+
+    feedback.textContent = "Enviando inscrição...";
+    feedback.className = "feedback-form";
+
+    try {
+      const resposta = await fetch(apiUrl("/api/voluntarios"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dados),
+      });
+
+      const resultado = await resposta.json();
+
+      if (!resposta.ok) {
+        throw new Error(resultado.message || "Erro ao cadastrar voluntário.");
+      }
+
+      feedback.textContent = "Inscrição enviada com sucesso.";
+      feedback.className = "feedback-form feedback-sucesso";
+      form.reset();
+    } catch (erro) {
+      feedback.textContent = erro.message || "Não foi possível conectar ao servidor.";
+      feedback.className = "feedback-form feedback-erro";
+    } finally {
+      botaoEnviar.disabled = false;
+    }
   });
 }

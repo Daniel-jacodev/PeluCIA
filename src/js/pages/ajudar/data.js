@@ -6,7 +6,7 @@ import {
   renderizarTransferencia,
   atualizarSaldoDestaque,
 } from "./renderers.js";
-import { listarContasMock, obterDoacoesMock } from "../../services/mockData.js";
+import { API_CONTAS_URL, API_DOACOES_URL } from "./shared.js";
 
 function calcularResumo(contas) {
   return contas.reduce(
@@ -26,7 +26,7 @@ function calcularResumo(contas) {
   );
 }
 
-export function carregarDadosAjudar() {
+export async function carregarDadosAjudar() {
   const resumoContainer = document.getElementById("resumoContasPublico");
   const historicoContainer = document.getElementById("historicoContas");
   const pixConteudo = document.querySelector(".conteudo-pix");
@@ -37,8 +37,23 @@ export function carregarDadosAjudar() {
   }
 
   try {
-    const contas = listarContasMock();
-    const doacoes = obterDoacoesMock();
+    const [respostaContas, respostaDoacoes] = await Promise.all([
+      fetch(API_CONTAS_URL),
+      fetch(API_DOACOES_URL),
+    ]);
+    const resultadoContas = await respostaContas.json();
+    const resultadoDoacoes = await respostaDoacoes.json();
+
+    if (!respostaContas.ok || !resultadoContas.sucesso) {
+      throw new Error(resultadoContas.message || "Erro ao buscar contas.");
+    }
+
+    if (!respostaDoacoes.ok || !resultadoDoacoes.sucesso) {
+      throw new Error(resultadoDoacoes.message || "Erro ao buscar dados de doação.");
+    }
+
+    const contas = resultadoContas.data;
+    const doacoes = resultadoDoacoes.data;
     const resumo = calcularResumo(contas);
 
     pixConteudo.innerHTML = renderizarPix(doacoes);

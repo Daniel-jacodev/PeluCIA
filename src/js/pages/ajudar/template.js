@@ -9,7 +9,6 @@ export function renderAjudarPage() {
     })}
 
     <section class="card-info">
-      <p class="aviso-demonstracao">Dados financeiros fictícios para demonstração. Não use para realizar doações.</p>
       <h2>Cuidando dos Animais do Campus</h2>
       <p>
         Os voluntários do Pelu&Cia cuidam diariamente dos animais que vivem no campus da UFC

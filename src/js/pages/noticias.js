@@ -1,5 +1,5 @@
 import { renderPageHeader, renderSectionHeading } from "../components/titles.js";
-import { listarNoticiasMock } from "../services/mockData.js";
+import { apiUrl } from "../services/api.js";
 
 export function renderNoticiasPage() {
   return `
@@ -41,6 +41,7 @@ export function renderNoticiasPage() {
   `;
 }
 
+const API_NOTICIAS_URL = apiUrl("/api/noticias");
 let noticiasCarregadas = [];
 
 function escaparHTML(valor) {
@@ -112,7 +113,7 @@ function abrirNoticia(id) {
   modal.showModal();
 }
 
-function carregarNoticias() {
+async function carregarNoticias() {
   const destaque = document.querySelector("#noticiaDestaque");
   const lista = document.querySelector("#listaNoticias");
 
@@ -121,7 +122,14 @@ function carregarNoticias() {
   }
 
   try {
-    noticiasCarregadas = listarNoticiasMock();
+    const resposta = await fetch(API_NOTICIAS_URL);
+    const resultado = await resposta.json();
+
+    if (!resposta.ok || !resultado.sucesso) {
+      throw new Error(resultado.message || "Erro ao buscar notícias.");
+    }
+
+    noticiasCarregadas = resultado.data.sort((a, b) => new Date(b.data) - new Date(a.data));
 
     if (noticiasCarregadas.length === 0) {
       destaque.innerHTML = '<p class="noticias-status">Nenhuma notícia cadastrada.</p>';
@@ -140,8 +148,8 @@ function carregarNoticias() {
     }
 
     lista.innerHTML = ultimasNoticias.map(renderizarCard).join("");
-  } catch {
-    destaque.innerHTML = '<p class="noticias-status">Não foi possível carregar as notícias demonstrativas.</p>';
+  } catch (erro) {
+    destaque.innerHTML = '<p class="noticias-status">Não foi possível carregar as notícias.</p>';
     lista.innerHTML = "";
   }
 }
