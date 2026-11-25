@@ -1,12 +1,20 @@
 import { initHeaderEffect, renderHeader } from './js/components/header.js';
 import { renderFooter } from './js/components/footer.js';
 import { initAjudarPage, renderAjudarPage } from './js/pages/ajudar.js';
-import { initAdminNoticiasPage, renderAdminNoticiasPage } from './js/pages/adminNoticias.js';
 import { initHomePage, renderHomePage } from './js/pages/home.js';
 import { initLoginPage, renderLoginPage } from './js/pages/login.js';
 import { initNoticiasPage, renderNoticiasPage } from './js/pages/noticias.js';
 import { renderSobrePage } from './js/pages/sobre.js';
 import { initVoluntarioPage, renderVoluntarioPage } from './js/pages/voluntario.js';
+import './css/gestao.css';
+import { renderAdminDashboard } from './js/pages/adminDashboard.js';
+import { renderNewsManagement, initNewsManagement } from './js/pages/admin/noticias.js';
+import { renderFinanceManagement, initFinanceManagement } from './js/pages/admin/contas.js';
+import { renderVolunteerManagement, initVolunteerManagement } from './js/pages/admin/voluntarios.js';
+import { renderVolunteerArea, initVolunteerArea } from './js/pages/areaVoluntario.js';
+import { renderManagementHeader, renderManagementFooter, initManagementHeader } from './js/components/managementShell.js';
+import { usesLocalData, hasSession } from './js/services/adminApi.js';
+import { closeModal } from './js/components/modal.js';
 
 const routes = {
   '/': {
@@ -46,52 +54,85 @@ const routes = {
     afterRender: initLoginPage,
   },
   '/admin': {
-    render: renderAdminNoticiasPage,
+    render: renderAdminDashboard,
     title: 'Pelu&Cia - Painel Administrativo',
-    pageClass: 'admin-noticias-page',
-    afterRender: initAdminNoticiasPage,
+    management: true,
+    dashboard: true,
   },
-  '/admin-noticias': {
-    render: renderAdminNoticiasPage,
-    title: 'Pelu&Cia - Painel Administrativo',
-    pageClass: 'admin-noticias-page',
-    afterRender: initAdminNoticiasPage,
+  '/admin/noticias': {
+    render: renderNewsManagement,
+    afterRender: initNewsManagement,
+    title: 'Pelu&Cia - Gestão de Notícias',
+    management: true,
   },
+  '/admin/contas': {
+    render: renderFinanceManagement,
+    afterRender: initFinanceManagement,
+    title: 'Pelu&Cia - Prestação de Contas',
+    management: true,
+  },
+  '/admin/voluntarios': {
+    render: renderVolunteerManagement,
+    afterRender: initVolunteerManagement,
+    title: 'Pelu&Cia - Gestão de Voluntários',
+    management: true,
+  },
+  '/area-voluntario': {
+    render: renderVolunteerArea,
+    afterRender: initVolunteerArea,
+    title: 'Pelu&Cia - Área do Voluntário',
+    management: true,
+    volunteer: true,
+  },
+  '/admin-noticias': { redirect: '/admin/noticias' },
 };
 
-function mountFooter() {
+function mountFooter(route = {}) {
   const footerContainer = document.querySelector('#footer');
 
   if (footerContainer) {
-    footerContainer.innerHTML = renderFooter();
+    footerContainer.innerHTML = route.management ? renderManagementFooter() : renderFooter();
   }
 }
 
-function mountHeader() {
+function mountHeader(route = {}) {
   const headerContainer = document.querySelector('#header');
 
   if (headerContainer) {
-    headerContainer.innerHTML = renderHeader();
-    initHeaderEffect();
+    headerContainer.innerHTML = route.management ? renderManagementHeader(route) : renderHeader();
+    if (route.management) {
+      window.onscroll = null;
+      initManagementHeader(route);
+    } else initHeaderEffect();
   }
 }
 
-function isUserAuthenticated() {
-  return !!localStorage.getItem("adminToken");
-}
+let disposePage;
+let renderVersion = 0;
 
-function renderRoute() {
+async function renderRoute() {
+  const version = ++renderVersion;
+  disposePage?.();
+  disposePage = undefined;
+  closeModal();
   const app = document.querySelector('#app');
 
   if (!app) {
     return;
   }
 
-  const pathname = window.location.pathname;
-  const isAuthenticated = isUserAuthenticated();
+  let pathname = window.location.pathname;
+  const redirect = routes[pathname]?.redirect;
+  if (redirect) {
+    window.history.replaceState({}, '', `${redirect}${window.location.search}${window.location.hash}`);
+    pathname = redirect;
+  }
+  const isAuthenticated = await hasSession('admin');
+  const volunteerSession = pathname === '/area-voluntario' && await hasSession('voluntario');
+  if (version !== renderVersion) return;
 
-  // Se tenta acessar /admin ou /admin-noticias sem autenticação, redireciona para login
-  if ((pathname === '/admin' || pathname === '/admin-noticias') && !isAuthenticated) {
+  // Sessões locais são independentes; nenhuma delas autoriza chamadas à API real.
+  if (((pathname === '/admin' || pathname.startsWith('/admin/')) && !isAuthenticated) || (pathname === '/area-voluntario' && !volunteerSession)) {
     window.history.replaceState({}, '', '/login');
     const route = routes['/login'];
     app.className = route.pageClass || '';
@@ -104,14 +145,14 @@ function renderRoute() {
   }
 
   // Se está em /login e já autenticado, redireciona para /admin
-  if (pathname === '/login' && isAuthenticated) {
+  if (pathname === '/login' && isAuthenticated && !usesLocalData()) {
     window.history.replaceState({}, '', '/admin');
     const route = routes['/admin'];
     app.className = route.pageClass || '';
     app.innerHTML = route.render();
     document.title = route.title;
-    mountHeader();
-    mountFooter();
+    mountHeader(route);
+    mountFooter(route);
     route.afterRender?.();
     return;
   }
@@ -121,9 +162,10 @@ function renderRoute() {
   app.className = route.pageClass || '';
   app.innerHTML = route.render();
   document.title = route.title;
-  mountHeader();
-  mountFooter();
-  route.afterRender?.();
+  mountHeader(route);
+  mountFooter(route);
+  const cleanup = route.afterRender?.();
+  if (typeof cleanup === 'function') disposePage = cleanup;
 
   if (window.location.hash) {
     document.querySelector(window.location.hash)?.scrollIntoView();
@@ -140,7 +182,7 @@ function navigateTo(path) {
 document.addEventListener('click', (event) => {
   const link = event.target.closest('a');
 
-  if (!link || link.target || link.origin !== window.location.origin) {
+  if (!link || link.target || link.origin !== window.location.origin || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || event.button !== 0) {
     return;
   }
 
