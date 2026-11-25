@@ -1,12 +1,13 @@
 import { apiUrl } from "../services/api.js";
+import { usesLocalData } from '../services/adminApi.js';
 
 export function renderLoginPage() {
   return `
     <section class="login-page">
       <div class="login-card">
         <img src="/images/logos/logo.webp" alt="Logo Pelu&Cia">
-        <h1>Login administrativo</h1>
-        <p>Acesse para cadastrar notícias.</p>
+        <h1>Acesse sua conta</h1>
+        <p>Entre para acessar seu painel.</p>
 
         <form id="formLogin">
           <label for="emailLogin">E-mail</label>
@@ -30,10 +31,18 @@ export function initLoginPage() {
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
+    const button = form.querySelector('[type="submit"]');
+    button.disabled = true;
     feedback.textContent = "Entrando...";
     feedback.className = "admin-feedback";
 
     try {
+      if (import.meta.env.DEV && usesLocalData()) {
+        const { loginLocal } = await import('../dev/session.js');
+        const role = loginLocal(document.getElementById('emailLogin').value, document.getElementById('senhaLogin').value);
+        window.location.href = role === 'admin' ? '/admin' : '/area-voluntario';
+        return;
+      }
       const resposta = await fetch(apiUrl("/api/auth/login"), {
         method: "POST",
         headers: {
@@ -55,8 +64,8 @@ export function initLoginPage() {
         feedback.className = "admin-feedback erro";
       }
     } catch (erro) {
-      feedback.textContent = "Não foi possível conectar ao servidor.";
+      feedback.textContent = usesLocalData() ? erro.message : "Não foi possível conectar ao servidor.";
       feedback.className = "admin-feedback erro";
-    }
+    } finally { button.disabled = false; }
   });
 }

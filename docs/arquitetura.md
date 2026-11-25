@@ -68,7 +68,12 @@ O frontend é uma SPA simples. `src/main.js` carrega a rota atual, monta cabeça
 - `/sobre`: apresentação institucional
 - `/voluntario`: inscrição de voluntário
 - `/login`: login administrativo
-- `/admin` e `/admin-noticias`: painel administrativo
+- `/admin`: painel administrativo
+- `/admin/noticias`: gestão de notícias
+- `/admin/contas`: prestação de contas administrativa
+- `/admin/voluntarios`: gestão de voluntários
+- `/area-voluntario`: perfil, horários e responsabilidades do voluntário
+- `/admin-noticias`: redirecionamento para `/admin/noticias`, com proteção de acesso
 
 ### Fluxo do cliente
 
@@ -93,7 +98,7 @@ flowchart LR
 - `noticias.js`: busca notícias, destaca a principal e abre modal.
 - `ajudar.js`: busca configuração de doação e contas lançadas no banco.
 - `voluntario.js`: envia cadastro de voluntário.
-- `adminNoticias.js`: painel unificado com abas de notícias, contas, doações, voluntários e mensagens.
+- `adminDashboard.js`, `admin/` e `areaVoluntario.js`: interfaces administrativas atuais e área do voluntário. As ferramentas antigas de mensagens recebidas, configuração de doação e cadastro manual foram descontinuadas. Ver `frontend/PROGRESSO.md` para acesso local, validações e integrações pendentes.
 
 ## Backend
 

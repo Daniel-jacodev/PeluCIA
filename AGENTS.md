@@ -1,0 +1,28 @@
+# PeluCIA — instruções de desenvolvimento
+
+- Escopo deste trabalho: exclusivamente frontend das 16 referências em `prototipo/`.
+- Branch de trabalho: `feat/frontend-admin`. Conferir o Git antes de editar; não trabalhar em `main`.
+- Não fazer commits, push, merge ou PR sem autorização. Preservar alterações de outros desenvolvedores.
+- `prototipo/` é a fonte visual oficial. Consultar cada imagem, inclusive modais e rodapés. Não modificar, renomear, excluir, adicionar ao Git ou ignorar automaticamente essas imagens.
+- Priorizar fidelidade de layout, fonte, cores, dimensões, espaçamento, ícones e estados. Reconstruir em HTML/CSS/JS; não usar capturas como interface.
+- Manter JavaScript Vanilla, ES Modules, HTML, CSS e Vite. Reutilizar componentes, isolar estilos das novas interfaces e evitar refatorações gerais.
+- Preservar páginas públicas e funcionalidades das interfaces atuais. `/noticias` é pública; `/admin/noticias` é gestão. `/admin-noticias` é apenas um redirecionamento para `/admin/noticias`, sujeito à autenticação.
+- As antigas ferramentas de mensagens recebidas, configuração de dados de doação e cadastro manual foram descontinuadas e não devem ser reintroduzidas. Não manter páginas, links ou estilos do painel antigo. Preservar os utilitários compartilhados em `src/js/utils/management.js`, os contatos dos modais atuais e as integrações públicas de doação/inscrição.
+- Não alterar backend, banco, schema, seeds, controllers, repositories, services, middlewares, contratos ou regras sem autorização explícita.
+- Usar APIs reais onde disponíveis. Não inventar endpoints nem simular sucesso em produção. O token administrativo não autentica voluntários.
+- Usar sempre rotas normais, sem galeria ou prefixo de prévia. Os mesmos componentes atendem desenvolvimento e produção.
+- `npm.cmd run dev:frontend` usa a API real. Nunca trocar para dados fictícios após erro HTTP/rede.
+- `npm.cmd run dev:admin` usa Vite com `--mode admin-local`; criar `.env.admin-local` apenas localmente com a configuração pública `VITE_LOCAL_DATA=true`, sem versionar arquivos `.env`. Essa opção só funciona sob `import.meta.env.DEV`. Nenhum módulo de fixtures, sessão ou persistência local pode entrar no build, mesmo com esse mode.
+- No modo local explícito, `src/js/dev/localStore.js` centraliza dados fictícios em `localStorage`, chave `pelucia.dev.data.v1`. Inicializar uma vez, persistir CRUD, manter IDs únicos, reler estado antes de operações e confirmar sucesso só depois da gravação. Não armazenar credenciais nem respostas da API real nessa camada.
+- Sessões locais ficam separadas no sessionStorage por perfil, em `src/js/dev/session.js`, com expiração. Admin: `admin@pelucia.local` / `admin123`. Voluntário: `voluntario@pelucia.local` / `voluntario123`. Essas contas são fictícias e exclusivas do desenvolvimento; nunca gerar adminToken com elas ou enviar suas credenciais ao backend.
+- Login/logout usam `/login`; logout encerra apenas o perfil atual e conserva registros locais. Administrador não autentica automaticamente a área do voluntário.
+- `src/js/services/adminApi.js` seleciona a fonte explicitamente, protege sessões e conserva os contratos HTTP.
+- Não apresentar avisos de pendências técnicas nas interfaces. Documentá-los exclusivamente em `docs/frontend/PROGRESSO.md`. Em produção, sucesso exige operação real concluída; ações sem contrato falham sem mutação ou requisição fictícia.
+- Registrar integrações pendentes e cobertura das 16 imagens em `docs/frontend/PROGRESSO.md`.
+- Implementar estados de carregamento, vazio, erro e envio. Garantir responsividade, labels, foco visível, teclado e modais acessíveis.
+- Entrada: `index.html`; rotas: `src/main.js`; componentes: `src/js/components/`; páginas: `src/js/pages/`; estilos: `src/css/`.
+- Comandos: `npm.cmd ci`, `npm.cmd run dev:frontend` (API), `npm.cmd run dev:admin` (dados locais), `npm.cmd run build`, `npm.cmd run preview`. Não alterar políticas do sistema operacional.
+- Não iniciar backend contra banco desconhecido: seu bootstrap altera schema e aplica seed.
+- Não expor variáveis secretas, tokens, credenciais ou dados pessoais. Apenas configuração pública recebe prefixo VITE_.
+- Validar visualmente com as referências, testar diferentes larguras e executar build. Diferenciar interface implementada, validada, integrada e aguardando backend.
+- Não declarar integração pendente como funcionalidade concluída. Não corrigir dívidas fora do escopo.
