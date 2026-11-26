@@ -1,5 +1,6 @@
 import { renderPageHeader, renderSectionHeading } from "../components/titles.js";
 import { apiUrl } from "../services/api.js";
+import { noticiasLocais } from "../data/noticias.js";
 
 export function renderNoticiasPage() {
   return `
@@ -11,8 +12,8 @@ export function renderNoticiasPage() {
     <section class="noticias-destaque-section">
       <div class="container">
         ${renderSectionHeading({
-          title: "Última notícia",
-          subtitle: "O destaque mais recente publicado pela equipe Pelu&Cia.",
+          title: "Última Notícia",
+
           className: "titulo-secao titulo-secao-noticias",
         })}
 
@@ -44,6 +45,10 @@ export function renderNoticiasPage() {
 const API_NOTICIAS_URL = apiUrl("/api/noticias");
 let noticiasCarregadas = [];
 
+const ICONE_CALENDARIO = `<svg class="icone-meta" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>`;
+
+const ICONE_USUARIO = `<svg class="icone-meta" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
+
 function escaparHTML(valor) {
   return String(valor ?? "")
     .replaceAll("&", "&amp;")
@@ -69,9 +74,11 @@ function renderizarDestaque(noticia) {
     </div>
 
     <div class="texto-destaque">
-      <span class="categoria-azul">${escaparHTML(noticia.tipo)}</span>
       <h2>${escaparHTML(noticia.titulo)}</h2>
-      <p class="data">${formatarData(noticia.data)} | Equipe Pelu&Cia</p>
+      <p class="data destaque-data">
+        <span>${ICONE_CALENDARIO} ${formatarData(noticia.data)}</span>
+        <span>${ICONE_USUARIO} Equipe Pelu&Cia</span>
+      </p>
       <p>${escaparHTML(noticia.resumo)}</p>
       <button class="btn-azul" type="button" data-noticia-id="${noticia.id}">Ler mais</button>
     </div>
@@ -83,9 +90,8 @@ function renderizarCard(noticia) {
     <article class="card-noticia">
       <img src="${escaparHTML(noticia.foto)}" alt="${escaparHTML(noticia.titulo)}">
       <div class="card-texto">
-        <span class="categoria">${escaparHTML(noticia.tipo)}</span>
         <h3>${escaparHTML(noticia.titulo)}</h3>
-        <p class="data">${formatarData(noticia.data)}</p>
+        <p class="data">${ICONE_CALENDARIO} ${formatarData(noticia.data)}</p>
         <p>${escaparHTML(noticia.resumo)}</p>
         <button class="btn-card" type="button" data-noticia-id="${noticia.id}">Ler mais</button>
       </div>
@@ -113,6 +119,20 @@ function abrirNoticia(id) {
   modal.showModal();
 }
 
+function preencherNoticias(destaque, lista) {
+  const [noticiaPrincipal, ...outrasNoticias] = noticiasCarregadas;
+  const ultimasNoticias = outrasNoticias.slice(0, 8);
+
+  destaque.innerHTML = renderizarDestaque(noticiaPrincipal);
+
+  if (ultimasNoticias.length === 0) {
+    lista.innerHTML = '<p class="noticias-status">Ainda não existem outras notícias publicadas.</p>';
+    return;
+  }
+
+  lista.innerHTML = ultimasNoticias.map(renderizarCard).join("");
+}
+
 async function carregarNoticias() {
   const destaque = document.querySelector("#noticiaDestaque");
   const lista = document.querySelector("#listaNoticias");
@@ -122,7 +142,7 @@ async function carregarNoticias() {
   }
 
   try {
-    const resposta = await fetch(API_NOTICIAS_URL);
+    const resposta = await fetch(API_NOTICIAS_URL, { signal: AbortSignal.timeout(3000) });
     const resultado = await resposta.json();
 
     if (!resposta.ok || !resultado.sucesso) {
@@ -136,22 +156,13 @@ async function carregarNoticias() {
       lista.innerHTML = "";
       return;
     }
-
-    const [noticiaPrincipal] = noticiasCarregadas;
-    const ultimasNoticias = noticiasCarregadas.slice(0, 8);
-
-    destaque.innerHTML = renderizarDestaque(noticiaPrincipal);
-
-    if (ultimasNoticias.length === 0) {
-      lista.innerHTML = '<p class="noticias-status">Ainda não existem outras notícias publicadas.</p>';
-      return;
-    }
-
-    lista.innerHTML = ultimasNoticias.map(renderizarCard).join("");
   } catch (erro) {
-    destaque.innerHTML = '<p class="noticias-status">Não foi possível carregar as notícias.</p>';
-    lista.innerHTML = "";
+    noticiasCarregadas = [...noticiasLocais].sort(
+      (a, b) => new Date(b.data) - new Date(a.data)
+    );
   }
+
+  preencherNoticias(destaque, lista);
 }
 
 export function initNoticiasPage() {

@@ -7,14 +7,12 @@ export function renderFooter() {
             <img src="/images/logos/logofooter.webp" alt="Logo Pelu&Cia">
 
             <div>
-              <h2>Pelu&Cia</h2>
-              <span>Cuidado Animal</span>
+              <h2>PeluCIA</h2>
             </div>
           </div>
 
           <p>
-            Projeto social da UFC Quixadá dedicado à alimentação, saúde e bem-estar
-            dos animais comunitários do campus.
+            Projeto social da UFC Quixadá voltado ao cuidado e ao bem-estar dos animais que residem no campus.
           </p>
         </div>
 
@@ -22,6 +20,7 @@ export function renderFooter() {
           <h3>Links Rápidos</h3>
 
           <ul>
+            <li><a href="/">Inicio</a></li>
             <li><a href="/ajudar">Ajudar</a></li>
             <li><a href="/noticias">Notícias</a></li>
             <li><a href="/sobre">Sobre</a></li>
@@ -40,13 +39,14 @@ export function renderFooter() {
 
           <a href="mailto:pelu.ciaqxd@gmail.com" class="social-item">
             <img src="/icons/email.webp" alt="">
+              
             <span>Email<br>pelu.ciaqxd@gmail.com</span>
           </a>
         </div>
       </div>
 
       <div class="container rodape-final">
-        <p>© 2026 Pelu&Cia - Todos os direitos reservados</p>
+        <p>© 2026 PeluCia - Todos os direitos reservados</p>
         <p>Desenvolvido com amor pela equipe UFC Quixadá</p>
       </div>
     </footer>

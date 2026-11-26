@@ -17,12 +17,12 @@
   --azul-claro: #eef6ff;
   --fonte-principal: "Poppins", Arial, Helvetica, sans-serif;
   --texto-xs: 13px;
-  --texto-sm: 14px;
+  --texto-sm: 16px;
   --texto-base: 16px;
   --texto-md: 18px;
   --titulo-sm: 24px;
   --titulo-md: 32px;
-  --titulo-lg: 36px;
+  --titulo-lg: 48px;
   --titulo-hero: 54px;
   --raio-sm: 6px;
   --raio-md: 8px;
@@ -44,6 +44,12 @@ body {
   background-color: var(--branco);
   color: var(--preto-destaque);
   line-height: 1.6;
+}
+
+.container {
+  width: 88%;
+  max-width: none;
+  margin: 0 auto;
 }
 
 h1,
@@ -75,18 +81,12 @@ a {
   color: inherit;
 }
 
-.container {
-  width: 92%;
-  max-width: 1120px;
-  margin: 0 auto;
-}
-
 .titulo-pagina {
-  background-color: var(--azul-titulo);
+  background: linear-gradient(135deg, #0655B8 0%, rgba(6, 85, 184, 0.8) 100%);
   color: var(--branco);
   text-align: center;
   padding: 45px 20px;
-  margin-bottom: 35px;
+  margin-bottom: 49px;
 }
 
 .titulo-pagina h1 {
@@ -97,14 +97,14 @@ a {
 
 .titulo-pagina p {
   color: var(--branco);
-  font-size: var(--texto-base);
+  font-size: 16px;
   max-width: 840px;
-  margin: 0 auto;
+  margin: 0 325px;
   line-height: 1.5;
 }
 
 .pagina-ajudar .titulo-pagina {
-  margin: -25px -20px 35px;
+  margin: 0px 0px 16px;
 }
 
 .btn-dourado,

@@ -18,9 +18,35 @@
   color: #991b1b;
 }
 
+@media (max-width: 900px) {
+  .cabecalho-conteudo {
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    padding-inline: 24px;
+  }
+
+  .menu {
+    order: 3;
+    flex: 1 0 100%;
+  }
+}
+
 @media (max-width: 768px) {
+  .container {
+    padding-inline: 24px;
+  }
+
+  .cabecalho-conteudo {
+    padding-inline: 20px;
+  }
+
+  .menu {
+    flex-wrap: wrap;
+  }
+
   .hero-home {
-    padding: 48px 20px;
+    min-height: auto;
+    padding: 48px 24px;
   }
 
   .hero-texto h1 {
@@ -93,5 +119,38 @@
 
   .faca-parte {
     padding: 48px 20px;
+  }
+
+  .rodape {
+    padding-block: 40px 20px;
+  }
+
+  .rodape-conteudo {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
+
+@media (max-width: 520px) {
+  .cabecalho-conteudo {
+    padding: 8px 16px;
+  }
+
+  .logo img {
+    width: 120px;
+  }
+
+  .menu {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+    overflow-x: visible;
+  }
+
+  .menu a {
+    flex: 0 0 auto;
+    padding: 8px 10px;
+    font-size: var(--texto-sm);
+    white-space: nowrap;
   }
 }

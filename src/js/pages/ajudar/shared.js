@@ -3,6 +3,17 @@ import { apiUrl } from "../../services/api.js";
 export const API_CONTAS_URL = apiUrl("/api/contas");
 export const API_DOACOES_URL = apiUrl("/api/doacoes");
 
+export const DOACOES_PADRAO = {
+  pix_chave: "https://nubank.com.br/cobrar/q3s13/69ec760f-8964-4091-bb0f-d95a5a908b7c1",
+  pix_favorecido: "PeluCIA - UFC Quixadá",
+  banco: "Nu Pagamentos S.A. (0260)",
+  agencia: "0001",
+  conta: "43847031-5",
+  instituicao: "Nu Pagamentos S.A. - Instituição de Pagamento",
+  observacao_transferencia:
+    "Após realizar a transferência, envie o comprovante para nosso e-mail pelu.ciaqxd@gmail.com para que possamos registrar sua contribuição.",
+};
+
 export function formatarMoeda(valor) {
   return new Intl.NumberFormat("pt-BR", {
     style: "currency",

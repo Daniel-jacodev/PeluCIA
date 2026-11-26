@@ -17,47 +17,62 @@
 }
 
 .foto-section {
-  padding: 35px 20px 10px;
+  padding: 40px 20px 10px;
 }
 
 .foto-gato {
-  max-width: 760px;
+  max-width: 896px;
   margin: auto;
 }
 
 .foto-gato img {
   width: 100%;
-  height: 330px;
-  border-radius: var(--raio-md);
+  height: 384px;
+  border-radius: 16px;
   object-fit: cover;
+  display: block;
+  box-shadow: 0 10px 24px rgba(17, 24, 39, 0.15);
 }
 
 .inscricao {
-  padding: 35px 20px 55px;
+  padding: 52px 20px 64px;
 }
 
 .formulario-card {
-  max-width: 760px;
+  box-sizing: border-box;
+  max-width: 768px;
   margin: 0 auto;
   background-color: var(--branco);
-  border: 1px solid var(--cinza-claro);
-  border-radius: var(--raio-md);
-  padding: 24px;
+  border: 1px solid #ececec;
+  border-radius: 12px;
+  padding: 24px 24px 40px;
 }
 
 .inscricao h2 {
   color: var(--azul-titulo);
-  margin-bottom: 5px;
+  font-size: 32px;
+  line-height: 1.2;
+  text-align: center;
+  margin-bottom: 4px;
 }
 
-.inscricao p {
-  margin-bottom: 22px;
+.inscricao .formulario-subtitulo {
+  color: var(--azul-titulo);
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 24px;
 }
 
 .linha-form {
   display: flex;
   flex-wrap: wrap;
-  gap: 18px;
+  gap: 16px;
+}
+
+.linha-form .campo {
+  flex: 1 1 240px;
+  width: auto;
+  min-width: 0;
 }
 
 .campo {
@@ -68,44 +83,91 @@
 .campo label {
   display: block;
   margin-bottom: 6px;
+  font-size: 14px;
 }
 
-.campo input {
+.campo input,
+.campo select,
+.campo textarea {
+  box-sizing: border-box;
   width: 100%;
   border: 0;
-  border-radius: var(--raio-sm);
+  border-radius: 6px;
   background-color: var(--brancogelo);
-  padding: 12px;
+  padding: 0 12px;
   font-family: var(--fonte-principal);
-  font-size: var(--texto-base);
+  font-size: 14px;
 }
 
-.label-disponibilidade {
-  display: block;
-  margin-bottom: 6px;
+.campo input,
+.campo select {
+  height: 36px;
 }
 
-.opcoes-disponibilidade {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+.campo textarea {
+  min-height: 64px;
+  padding: 10px 12px;
+  resize: vertical;
 }
 
-.opcoes-disponibilidade label {
-  font-weight: normal;
+.campo input::placeholder,
+.campo textarea::placeholder {
+  color: #717182;
+}
+
+.campo select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 36px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23717182' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  cursor: pointer;
+}
+
+.campo select:invalid {
+  color: #717182;
+}
+
+.campo select option {
+  color: #111827;
 }
 
 .termos {
   display: flex;
+  align-items: flex-start;
   gap: 10px;
   margin-top: 8px;
   font-size: var(--texto-sm);
 }
 
+.termos input {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
 .btn-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   width: 100%;
-  padding: 13px;
+  min-height: 40px;
+  padding: 10px;
   margin-top: 20px;
+  border: 0;
+  border-radius: 6px;
+  background-color: var(--azul-titulo);
+  color: var(--branco);
+  font-family: var(--fonte-principal);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 .login-page,

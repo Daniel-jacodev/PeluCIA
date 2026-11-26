@@ -1,15 +1,15 @@
 import { renderSectionHeading } from "../components/titles.js";
 import { apiUrl } from "../services/api.js";
+import { noticiasLocais } from "../data/noticias.js";
 
 export function renderHomePage() {
   return `
     <section class="hero-home">
       <div class="container hero-conteudo">
         <div class="hero-texto">
-          <h1>Cuidando com amor dos animais do nosso campus</h1>
+          <h1>Transforme uma vida com amor e carinho</h1>
           <p>
-            A Pelu&Cia é um projeto social da UFC - Campus Quixadá dedicado a
-            alimentar, vacinar e garantir o bem-estar dos cães e gatos que vivem aqui.
+           PeluCia é um projeto social da UFC - Campus Quixadá dedicado ao cuidado de animais do campus. Fazemos a diferença na vida de cães e gatos vacinando, alimentando e garantindo o bem estar deles.
           </p>
 
           <div class="hero-botoes">
@@ -30,6 +30,7 @@ export function renderHomePage() {
     <section class="ultimas-noticias">
       <div class="container">
         <h2>Últimas Notícias</h2>
+        <h3 class="subtitle-noticias">Acompanhe as novidades do projeto</h3>
         <div id="homeNoticias" class="home-noticias-lista">
           <p class="noticias-status">Carregando notícias...</p>
         </div>
@@ -47,13 +48,16 @@ export function renderHomePage() {
 
         <form class="formulario-contato" id="formContatoHome">
           <label for="name">Nome</label>
-          <input type="text" id="name" name="name" required>
+          <input placeholder="Seu nome completo" type="text" id="name" name="name" required>
 
           <label for="email">E-mail</label>
-          <input type="email" id="email" name="email" required>
+          <input placeholder="seu@email.com" type="email" id="email" name="email" required>
+
+          <label for="subject">Assunto</label>
+          <input placeholder="Adicione o assunto ao qual você deseja falar" type="text" id="subject" name="subject" required>
 
           <label for="message">Mensagem</label>
-          <textarea id="message" name="message" required></textarea>
+          <textarea placeholder="Escreva sua mensagem aqui..." id="message" name="message" required></textarea>
 
           <button type="submit">Enviar Mensagem</button>
           <p class="feedback-form" id="feedbackContatoHome" role="status" aria-live="polite"></p>
@@ -106,7 +110,7 @@ export async function initHomePage() {
   }
 
   try {
-    const resposta = await fetch(apiUrl("/api/noticias"));
+    const resposta = await fetch(apiUrl("/api/noticias"), { signal: AbortSignal.timeout(3000) });
     const resultado = await resposta.json();
 
     if (!resposta.ok || !resultado.sucesso) {
@@ -124,7 +128,13 @@ export async function initHomePage() {
 
     lista.innerHTML = ultimasNoticias.map(renderizarNoticiaHome).join("");
   } catch (erro) {
-    lista.innerHTML = '<p class="noticias-status">Não foi possível carregar as notícias.</p>';
+    const noticiasOrdenadas = [...noticiasLocais].sort(
+      (a, b) => new Date(b.data) - new Date(a.data)
+    );
+    lista.innerHTML = noticiasOrdenadas
+      .slice(0, 3)
+      .map(renderizarNoticiaHome)
+      .join("");
   }
 
   formContato?.addEventListener("submit", async (event) => {

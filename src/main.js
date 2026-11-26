@@ -11,32 +11,32 @@ import { initVoluntarioPage, renderVoluntarioPage } from './js/pages/voluntario.
 const routes = {
   '/': {
     render: renderHomePage,
-    title: 'Pelu&Cia - Home',
+    title: 'PeluCia - Home',
     afterRender: initHomePage,
   },
   '/index.html': {
     render: renderHomePage,
-    title: 'Pelu&Cia - Home',
+    title: 'PeluCia - Home',
     afterRender: initHomePage,
   },
   '/ajudar': {
     render: renderAjudarPage,
-    title: 'Pelu&Cia - Ajudar',
+    title: 'PeluCia - Ajudar',
     pageClass: 'pagina-ajudar',
     afterRender: initAjudarPage,
   },
   '/noticias': {
     render: renderNoticiasPage,
-    title: 'Pelu&Cia - Notícias',
+    title: 'PeluCia - Notícias',
     afterRender: initNoticiasPage,
   },
   '/sobre': {
     render: renderSobrePage,
-    title: 'Pelu&Cia - Sobre',
+    title: 'PeluCia - Sobre',
   },
   '/voluntario': {
     render: renderVoluntarioPage,
-    title: 'Pelu&Cia - Voluntariado',
+    title: 'PeluCia - Voluntariado',
     pageClass: 'voluntariado-page',
     afterRender: initVoluntarioPage,
   },

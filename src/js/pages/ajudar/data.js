@@ -6,7 +6,34 @@ import {
   renderizarTransferencia,
   atualizarSaldoDestaque,
 } from "./renderers.js";
-import { API_CONTAS_URL, API_DOACOES_URL } from "./shared.js";
+import { API_CONTAS_URL, API_DOACOES_URL, DOACOES_PADRAO } from "./shared.js";
+
+const CONTAS_EXEMPLO = [
+  {
+    tipo: "entrada",
+    descricao: "Primeiros custos de tratamento",
+    valor: 2456.67,
+    data: "2026-04-05",
+  },
+  {
+    tipo: "saida",
+    descricao: "Clínica veterinária",
+    valor: 2332.80,
+    data: "2026-04-03",
+  },
+  {
+    tipo: "saida",
+    descricao: "Pet shop",
+    valor: 123.98,
+    data: "2026-04-01",
+  },
+];
+
+const RESUMO_EXEMPLO = {
+  entradas: 800,
+  saidas: 593.79,
+  saldo: 977.21,
+};
 
 function calcularResumo(contas) {
   return contas.reduce(
@@ -36,6 +63,10 @@ export async function carregarDadosAjudar() {
     return;
   }
 
+  pixConteudo.innerHTML = renderizarPix(DOACOES_PADRAO);
+  transferenciaConteudo.innerHTML = renderizarTransferencia(DOACOES_PADRAO);
+  configurarBotaoCopiarPix();
+
   try {
     const [respostaContas, respostaDoacoes] = await Promise.all([
       fetch(API_CONTAS_URL),
@@ -64,20 +95,18 @@ export async function carregarDadosAjudar() {
     atualizarSaldoDestaque(resumo, contas);
 
     if (contas.length === 0) {
-      historicoContainer.innerHTML =
-        '<p class="contas-status">Ainda não existem movimentações cadastradas.</p>';
+      resumoContainer.innerHTML = renderizarResumo(RESUMO_EXEMPLO);
+      historicoContainer.innerHTML = renderizarHistorico(CONTAS_EXEMPLO);
       return;
     }
 
     historicoContainer.innerHTML = renderizarHistorico(contas);
   } catch (erro) {
-    resumoContainer.innerHTML =
-      '<p class="contas-status">Não foi possível carregar a prestação de contas.</p>';
-    historicoContainer.innerHTML =
-      '<p class="contas-status">Não foi possível carregar o histórico financeiro.</p>';
-    pixConteudo.innerHTML = '<p class="contas-status">Não foi possível carregar os dados do PIX.</p>';
-    transferenciaConteudo.innerHTML =
-      '<p class="contas-status">Não foi possível carregar os dados de transferência.</p>';
+    resumoContainer.innerHTML = renderizarResumo(RESUMO_EXEMPLO);
+    historicoContainer.innerHTML = renderizarHistorico(CONTAS_EXEMPLO);
+    pixConteudo.innerHTML = renderizarPix(DOACOES_PADRAO);
+    configurarBotaoCopiarPix();
+    transferenciaConteudo.innerHTML = renderizarTransferencia(DOACOES_PADRAO);
     const saldoTopo = document.getElementById("saldoAtualCaixa");
     if (saldoTopo) {
       saldoTopo.textContent = "Indisponível";
