@@ -11,7 +11,7 @@ export function renderVoluntarioPage() {
 
     <section class="foto-section">
       <div class="foto-gato">
-        <img src="https://images.unsplash.com/photo-1596854407944-bf87f6fdd49e?auto=format&fit=crop&w=920&q=80" alt="Gato preto olhando entre barras">
+        <img src="/images/gato.webp" alt="Gato entre animais acolhidos pelo projeto">
       </div>
     </section>
 

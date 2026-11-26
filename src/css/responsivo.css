@@ -154,3 +154,389 @@
     white-space: nowrap;
   }
 }
+
+/* Ajustes globais para impedir transbordamento em todas as resoluções */
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+img,
+svg {
+  max-width: 100%;
+}
+
+.container {
+  width: min(88%, 1180px);
+  min-width: 0;
+}
+
+.titulo-pagina p,
+.faca-parte-conteudo p,
+.card-info p {
+  max-width: 840px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.botao-login-sair {
+  border: 0;
+}
+
+.login-esqueci {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font-family: var(--fonte-principal);
+  cursor: pointer;
+}
+
+.login-page,
+.admin-page,
+#app {
+  min-width: 0;
+  width: 100%;
+}
+
+@media (max-width: 1100px) {
+  .container {
+    width: calc(100% - 48px);
+  }
+
+  .hero-conteudo {
+    gap: 24px;
+  }
+
+  .hero-imagem {
+    width: 520px;
+  }
+
+  .card-info,
+  .estatisticas,
+  .doacao {
+    width: calc(100% - 48px);
+  }
+
+  .card-info p {
+    margin-left: 40px;
+    margin-right: 40px;
+  }
+}
+
+@media (max-width: 900px) {
+  .cabecalho-conteudo {
+    row-gap: 2px;
+  }
+
+  .cabecalho-conteudo > .logo {
+    margin-right: auto;
+  }
+
+  .menu {
+    width: 100%;
+  }
+
+  .menu a {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+
+  .home-noticias-lista {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hero-conteudo {
+    flex-direction: column;
+  }
+
+  .hero-texto {
+    max-width: 680px;
+  }
+
+  .hero-foto {
+    width: 100%;
+  }
+
+  .hero-imagem {
+    width: 100%;
+  }
+
+  .estatisticas,
+  .resumo-contas-publico {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .card-estatistica {
+    width: 100%;
+  }
+
+  .impacto-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-grid-duplo {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: clamp(34px, 9vw, 44px);
+  }
+
+  h2 {
+    font-size: clamp(26px, 7vw, 32px);
+  }
+
+  .container {
+    width: calc(100% - 32px);
+  }
+
+  .cabecalho-conteudo {
+    width: calc(100% - 32px);
+  }
+
+  .menu {
+    gap: 2px;
+  }
+
+  .menu a {
+    min-width: 0;
+    padding: 8px 7px;
+  }
+
+  .menu svg {
+    display: none;
+  }
+
+  .titulo-pagina,
+  .hero-sobre,
+  .titulo {
+    padding: 40px 16px;
+  }
+
+  .titulo-pagina p,
+  .titulo p {
+    margin: 0 auto;
+  }
+
+  .home-noticias-lista,
+  .noticias-grid,
+  .impacto-grid,
+  .estatisticas,
+  .resumo-contas-publico,
+  .rodape-conteudo {
+    grid-template-columns: 1fr;
+  }
+
+  .ultimas-noticias .card-noticia,
+  .card-noticia {
+    height: auto;
+    min-height: 390px;
+  }
+
+  .ultimas-noticias .card-texto {
+    height: auto;
+    min-height: 174px;
+  }
+
+  .card-info,
+  .estatisticas,
+  .doacao {
+    width: calc(100% - 32px);
+  }
+
+  .card-info {
+    padding: 20px 16px;
+  }
+
+  .card-info p {
+    margin: 0 auto 24px;
+  }
+
+  .estatisticas {
+    display: grid;
+  }
+
+  .abas {
+    flex-wrap: wrap;
+  }
+
+  .abas label {
+    flex: 1 1 140px;
+  }
+
+  .conteudos-abas {
+    min-width: 0;
+  }
+
+  .conteudo {
+    width: 100%;
+  }
+
+  .conteudo-contas {
+    padding-inline: 16px;
+  }
+
+  .dados-banco div {
+    align-items: flex-start;
+  }
+
+  .dados-banco span {
+    flex-basis: 78px;
+  }
+
+  .linha-form {
+    flex-direction: column;
+  }
+
+  .linha-form .campo {
+    flex-basis: auto;
+  }
+
+  .formulario-card {
+    padding: 20px 16px 32px;
+  }
+
+  .foto-gato img {
+    height: 300px;
+  }
+
+  .login-page {
+    min-height: calc(100vh - 120px);
+    padding: 36px 16px;
+  }
+
+  .login-topo {
+    margin-bottom: 20px;
+  }
+
+  .login-topo img {
+    width: 68px;
+    height: 68px;
+  }
+
+  .login-card {
+    padding: 20px 16px;
+  }
+
+  .admin-hero-card {
+    width: 100%;
+  }
+
+  .admin-tabs {
+    width: 100%;
+  }
+
+  .admin-card,
+  .admin-resumo-card {
+    min-width: 0;
+  }
+
+  .noticia-modal {
+    width: calc(100% - 24px);
+    padding: 20px 16px;
+  }
+
+  .faca-parte-conteudo {
+    padding-inline: 16px;
+  }
+
+  .faca-parte-conteudo p {
+    margin: 0 auto 22px;
+  }
+
+  .rodape {
+    min-height: 0;
+  }
+
+  .rodape-conteudo {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 520px) {
+  .container,
+  .cabecalho-conteudo {
+    width: calc(100% - 24px);
+  }
+
+  .logo img {
+    width: 108px;
+  }
+
+  .botao-login {
+    min-height: 36px;
+    padding: 8px 12px;
+  }
+
+  .cabecalho-conteudo {
+    min-height: 56px;
+  }
+
+  .menu {
+    justify-content: space-between;
+  }
+
+  .menu a {
+    flex: 1 1 72px;
+    font-size: 12px;
+    padding-inline: 4px;
+  }
+
+  .hero-texto h1 {
+    font-size: 34px;
+  }
+
+  .hero-texto p {
+    font-size: 17px;
+  }
+
+  .formulario-contato {
+    padding: 16px;
+  }
+
+  .login-opcoes {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .dados-banco strong {
+    max-width: 210px;
+  }
+
+  .linha-gasto,
+  .destaque-data,
+  .faca-parte-botoes {
+    flex-wrap: wrap;
+  }
+
+  .faca-parte-botoes a {
+    width: 100%;
+  }
+
+  .foto-gato {
+    padding-inline: 12px;
+  }
+
+  .foto-gato img {
+    height: 220px;
+  }
+
+  .inscricao h2 {
+    font-size: 26px;
+  }
+
+  .admin-hero-card h1 {
+    font-size: 28px;
+  }
+
+  .admin-card {
+    border-radius: 14px;
+  }
+
+  .admin-list-item {
+    width: 100%;
+  }
+}

@@ -40,6 +40,7 @@ cp .env.example .env
 ```
 
 Para habilitar o painel, preencha `ADMIN_EMAIL`, `ADMIN_PASSWORD` e `ADMIN_TOKEN_SECRET` no `.env`. Gere o segredo com `node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"`.
+Para habilitar o acesso de voluntários, preencha também `VOLUNTARIO_EMAIL` e `VOLUNTARIO_PASSWORD`.
 
 4. Suba a infraestrutura local.
 

@@ -37,6 +37,11 @@ function isActiveLink(href) {
 }
 
 export function renderHeader() {
+  const autenticado = !!(localStorage.getItem("adminToken") || localStorage.getItem("voluntarioToken"));
+  const botaoLogin = autenticado
+    ? `<button type="button" class="botao-login botao-login-sair" id="botaoLogout">Sair</button>`
+    : `<a href="/login" class="botao-login">Entrar</a>`;
+
   const links = menuItems
     .map((item) => {
       const activeClass = isActiveLink(item.href) ? ' class="ativo"' : "";
@@ -61,7 +66,7 @@ export function renderHeader() {
           ${links}
         </nav>
 
-        <a href="/login" class="botao-login">Entrar</a>
+        ${botaoLogin}
       </div>
     </header>
   `;
@@ -80,4 +85,10 @@ export function initHeaderEffect() {
 
   updateHeader();
   window.onscroll = updateHeader;
+
+  document.getElementById("botaoLogout")?.addEventListener("click", () => {
+    localStorage.removeItem("adminToken");
+    localStorage.removeItem("voluntarioToken");
+    window.location.href = "/";
+  });
 }

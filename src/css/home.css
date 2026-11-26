@@ -107,15 +107,15 @@
 }
 
 .ultimas-noticias .card-noticia img {
-  height: 216px;
+  height: 200px;
   border-radius: 12px 12px 0 0;
 }
 
 .ultimas-noticias .card-texto {
   align-items: flex-start;
   gap: 7px;
-  height: 204px;
-  padding: 24px 24px 62px;
+  height: 220px;
+  padding: 18px 22px 56px;
 }
 
 .ultimas-noticias .categoria {
@@ -128,6 +128,10 @@
   line-height: 1.25;
   font-weight: 600;
   font-family: "Montserrat", sans-serif;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
 }
 
 .ultimas-noticias .card-texto .data {
@@ -138,16 +142,20 @@
   line-height: 1.25;
 }
 
-.ultimas-noticias .card-texto p {
+.ultimas-noticias .card-texto p:not(.data) {
   color: #717182;
-  font-size: 16px;
-  line-height: 1.45;
+  font-size: 14px;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
 }
 
-.ultimas-noticias .btn-card {
+.ultimas-noticias .card-texto .btn-card {
   position: absolute;
   left: 50%;
-  bottom: 16px;
+  bottom: 12px;
   transform: translateX(-50%);
   min-height: 32px;
   padding: 7px 24px;

@@ -17,6 +17,17 @@ export function criarTokenAdmin() {
   return `${payload}.${assinatura}`;
 }
 
+export function criarTokenVoluntario() {
+  const dados = {
+    tipo: 'voluntario',
+    expiraEm: Date.now() + TOKEN_DURATION,
+  };
+  const payload = Buffer.from(JSON.stringify(dados)).toString('base64url');
+  const assinatura = assinar(payload, process.env.ADMIN_TOKEN_SECRET);
+
+  return `${payload}.${assinatura}`;
+}
+
 export function validarTokenAdmin(token) {
   const secret = process.env.ADMIN_TOKEN_SECRET;
   if (!token || !secret) {
